@@ -2953,9 +2953,15 @@ body.dark #skills {
 
 .project-content .project-note {
   margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+.project-content .project-note strong {
   color: var(--accent);
-  font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .project-content a {
