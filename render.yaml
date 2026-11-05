@@ -1,0 +1,47 @@
+databases:
+  - name: kwickbox-portfolio-db
+    plan: free
+    databaseName: kwickbox
+    user: kwickbox
+
+services:
+  - type: web
+    name: kwickbox-portfolio
+    runtime: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate --noinput
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn kwickbox.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "kwickbox-portfolio.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://kwickbox-portfolio.onrender.com"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kwickbox-portfolio-db
+          property: connectionString
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.smtp.EmailBackend
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+      - key: CONTACT_EMAIL_RECIPIENT
+        value: adeoyeridwan073@gmail.com
